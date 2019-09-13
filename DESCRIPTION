@@ -1,0 +1,11 @@
+Package: tRulli
+Type: Package
+Title: R Interface to Finnish Customs (Tulli) database Uljas
+Version: 0.1.0
+Authors@R: person("Janne", "Huovari", email = "janne.huovari@ptt.fi", role = c("aut", "cre"))
+Description: An interface to Uljas database.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.2)
+Imports: httr, jsonlite

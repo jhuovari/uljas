@@ -1,0 +1,67 @@
+#'
+#'
+
+
+uljas_api <- function(lang = "en", atype, konv, ...) {
+  url <- httr::modify_url(url="http://uljas.tulli.fi/uljas/graph/api.aspx", query = list(lang = lang, atype = atype, konv = konv, ...))
+
+  resp <- httr::GET(url)
+
+  if (httr::http_type(resp) != "application/json") {
+    stop("API did not return json", call. = FALSE)
+  }
+
+  parsed <- jsonlite::fromJSON(httr::content(resp, "text"), simplifyVector = TRUE, flatten = TRUE)
+
+  if (httr::http_error(resp)) {
+    stop(
+      sprintf(
+        "Uljas API request failed [%s]\n%s\n<%s>",
+        httr::status_code(resp),
+        parsed$message,
+        parsed$documentation_url
+      ),
+      call. = FALSE
+    )
+  }
+
+  structure(
+    list(
+      content = parsed,
+      url = url,
+      response = resp
+    ),
+    class = paste0("uljas_api_", atype)
+  )
+}
+
+#'
+#'
+#' @examples
+#' s <- uljas_stats("fi")
+#'
+uljas_stats <- function(lang = "en"){
+  uljas_api(lang =, atype = "stats", konv = "json")
+}
+
+
+
+#' print method for uljas_api_stats
+#'
+print.uljas_api_stats <- function(x){
+  x$content
+}
+
+
+
+#' Get dimensions from Uljas api
+#'
+#' @examples
+#'   d <- uljas_dims(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
+#'
+
+uljas_dims <- function(ifile, lang = "en"){
+   uljas_api(lang = "en", atype = "dims", konv = "json", ifile = ifile)
+}
+
+
