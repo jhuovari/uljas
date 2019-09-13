@@ -56,12 +56,30 @@ print.uljas_api_stats <- function(x){
 
 #' Get dimensions from Uljas api
 #'
+#' @return a list.
 #' @examples
 #'   d <- uljas_dims(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
 #'
 
 uljas_dims <- function(ifile, lang = "en"){
-   uljas_api(lang = "en", atype = "dims", konv = "json", ifile = ifile)
+   d <- uljas_api(lang = "en", atype = "dims", konv = "json", ifile = ifile)
+   d_list <- d$content$dimension$classification
+   names(d_list) <- purrr::map(d_list, function(x) x$label[[1]])
 }
 
+#' Get classifications from Uljas api
+#'
+#' @return a list.
+#' @examples
+#'   sitc_class <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = "SITC Products")
+#'   sitc_class_all <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = NULL)
+#'
+
+uljas_class <- function(ifile, class, lang = "en"){
+  class <- translate_queries(class)
+  cla <- uljas_api(lang = "en", atype = "class", konv = "json", ifile = ifile, class = class)
+  cla_list <- cla$content$classification$class
+  names(cla_list) <- cla$content$classification$label
+  cla_list
+  }
 
