@@ -2,8 +2,8 @@
 #'
 
 
-uljas_api <- function(lang = "en", atype, konv, ...) {
-  url <- httr::modify_url(url="http://uljas.tulli.fi/uljas/graph/api.aspx", query = list(lang = lang, atype = atype, konv = konv, ...))
+uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
+  url <- httr::modify_url(url="http://uljas.tulli.fi/uljas/graph/api.aspx", query = c(list(lang = lang, atype = atype, konv = konv, ...), query_list))
 
   resp <- httr::GET(url)
 
@@ -87,10 +87,21 @@ uljas_class <- function(ifile, class, lang = "en"){
 #' Get data from Uljas api
 #'
 #' @examples
-#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", `Classification of Products SITC1` = 1, TimePeriod = "=ALL", Country = "AT", Flow = 1, Indicators = "V1")
+#'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Country = "AT", Flow = 1, Indicators = "V1")
+#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifications = sitc_query)
 
-uljas_data <- function(ifile, lang = "en", ...){
-  dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ...)
+
+
+uljas_data <- function(ifile, lang = "en", classifications, ...){
+  classifications <- purrr::map(classifications, paste, collapse = '"')
+  dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ..., query_list = classifications)
+  dat <- suppressMessages(
+    dat$content %>%
+      tidyr::unnest_wider(keys)
+  ) %>%
+    dplyr::mutate(vals = unlist(vals))
   dat
 }
+
+dd
 
