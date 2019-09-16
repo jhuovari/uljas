@@ -87,21 +87,22 @@ uljas_class <- function(ifile, class, lang = "en"){
 #' Get data from Uljas api
 #'
 #' @examples
-#'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Country = "AT", Flow = 1, Indicators = "V1")
-#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifications = sitc_query)
+#'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
+#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
 
 
 
-uljas_data <- function(ifile, lang = "en", classifications, ...){
-  classifications <- purrr::map(classifications, paste, collapse = '"')
-  dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ..., query_list = classifications)
+uljas_data <- function(ifile, lang = "en", classifiers, ...){
+  classifiers <- purrr::map(classifiers, paste, collapse = '"')
+  dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ..., query_list = classifiers)
   dat <- suppressMessages(
     dat$content %>%
       tidyr::unnest_wider(keys)
   ) %>%
     dplyr::mutate(vals = unlist(vals))
+  names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
   dat
 }
 
-dd
+
 
