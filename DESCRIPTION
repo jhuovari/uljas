@@ -1,4 +1,4 @@
-Package: tRulli
+Package: uljas
 Type: Package
 Title: R Interface to Finnish Customs (Tulli) database Uljas
 Version: 0.1.0
