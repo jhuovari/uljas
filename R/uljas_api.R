@@ -1,5 +1,16 @@
+#' Main api-function for R client for the Finnish Customs (Tulli) database Uljas
+#'
+#' Use user functions \code{\linki{uljas_stats}}, \code{\linki{uljas_dims}},
+#' \code{\linki{uljas_class}} and \code{\linki{uljas_data}}.
+#' See more from Uljas api page https://tulli.fi/en/statistics/uljas-api
 #'
 #'
+#' @param land a language code. Available en, fi, se.
+#' @param atype a type of query.
+#' @param konv a output format
+#' @param ... additional parameters for a query.
+#' @param query_list additional parameters for a query as a list.
+#' @export
 
 
 uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
@@ -33,75 +44,6 @@ uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
     ),
     class = paste0("uljas_api_", atype)
   )
-}
-
-#'
-#'
-#' @examples
-#' s <- uljas_stats("fi")
-#'
-uljas_stats <- function(lang = "en"){
-  uljas_api(lang =, atype = "stats", konv = "json")
-}
-
-
-
-#' print method for uljas_api_stats
-#'
-print.uljas_api_stats <- function(x){
-  x$content
-}
-
-
-
-#' Get dimensions from Uljas api
-#'
-#' @return a list.
-#' @examples
-#'   sitc_dims <- uljas_dims(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
-#'
-
-uljas_dims <- function(ifile, lang = "en"){
-   d <- uljas_api(lang = "en", atype = "dims", konv = "json", ifile = ifile)
-   d_list <- d$content$dimension$classification
-   names(d_list) <- purrr::map(d_list, function(x) x$label[[1]])
-   d_list
-}
-
-#' Get classifications from Uljas api
-#'
-#' @return a list.
-#' @examples
-#'   sitc_class <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = "SITC Products")
-#'   sitc_class_all <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = NULL)
-#'
-
-uljas_class <- function(ifile, class, lang = "en"){
-  class <- translate_queries(class)
-  cla <- uljas_api(lang = lang, atype = "class", konv = "json", ifile = ifile, class = class)
-  cla_list <- cla$content$classification$class
-  names(cla_list) <- cla$content$classification$label
-  cla_list
-  }
-
-#' Get data from Uljas api
-#'
-#' @examples
-#'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
-#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
-
-
-
-uljas_data <- function(ifile, lang = "en", classifiers, ...){
-  classifiers <- purrr::map(classifiers, paste, collapse = '"')
-  dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ..., query_list = classifiers)
-  dat <- suppressMessages(
-    dat$content %>%
-      tidyr::unnest_wider(keys)
-  ) %>%
-    dplyr::mutate(vals = unlist(vals))
-  names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
-  dat
 }
 
 

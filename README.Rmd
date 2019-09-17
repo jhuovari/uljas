@@ -1,0 +1,92 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# uljas
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The R client for the Finnish Customs (Tulli) database Uljas. See: https://tulli.fi/en/statistics/uljas-api
+
+## Installation
+
+You can install the uljas from [github](https://) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("jhuovari/uljas")
+```
+
+## Use
+
+### statistics
+
+Statistics present in the database.
+
+```{r stats}
+
+library(uljas)
+
+stats <- uljas_stats(lang = "en")
+
+knitr::kable(stats)
+```
+
+
+### Dimensions
+
+`uljas_dims` return dimensions that are available for a certain statistics. Use ifile from `uljas_stats`.
+
+```{r dims}
+
+sitc_dims <- uljas_dims(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
+
+str(sitc_dims)
+```
+
+
+### Classifications
+
+`sitc_class` returns values in the classification (specified with class parameter) for statistics (specified with ifile parameter). Also all (in main classifications) with `class = NULL`.
+
+```{r class}
+
+sitc_dims$`Classification of Products SITC`$label
+
+sitc_class <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = "SITC Products")
+#   sitc_class_all <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = NULL)
+
+str(sitc_class)
+
+```
+
+
+### Data
+
+`sitc_query` returns the data for class value combinations from a statistics (specified with ifile parameter). 
+
+```{r data}
+
+sitc_query <- list(`SITC Products` = c("0" , "02"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
+sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
+
+head(sitc_data)
+
+```
+
+
+
+An individual request return is limited to 50 000 cells.
+
