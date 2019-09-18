@@ -1,11 +1,11 @@
 #' Main api-function for R client for the Finnish Customs (Tulli) database Uljas
 #'
-#' Use user functions \code{\linki{uljas_stats}}, \code{\linki{uljas_dims}},
-#' \code{\linki{uljas_class}} and \code{\linki{uljas_data}}.
+#' Use user functions \code{\link{uljas_stats}}, \code{\link{uljas_dims}},
+#' \code{\link{uljas_class}} and \code{\link{uljas_data}}.
 #' See more from Uljas api page https://tulli.fi/en/statistics/uljas-api
 #'
 #'
-#' @param land a language code. Available en, fi, se.
+#' @param lang a language code. Available en, fi, se.
 #' @param atype a type of query.
 #' @param konv a output format
 #' @param ... additional parameters for a query.

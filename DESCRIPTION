@@ -1,7 +1,7 @@
 Package: uljas
 Type: Package
 Title: R client for the Finnish Customs (Tulli) database Uljas
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Janne", "Huovari", email = "janne.huovari@ptt.fi", role = c("aut", "cre"))
 Description: An interface to Uljas database.
 License: GPL-3
@@ -12,3 +12,4 @@ Imports: httr, jsonlite, dplyr, purrr, stringr, tidyr
 Suggets: knitr
 URL: https://github.com/jhuovari/uljas
 BugReports: https://github.com/jhuovari/uljas/issues
+RoxygenNote: 6.1.1

@@ -96,7 +96,7 @@ str(sitc_dims)
 
 ### Classifications
 
-`sitc_class` returns values in the classification (specified with class
+`uljas_class` returns values in the classification (specified with class
 parameter) for statistics (specified with ifile parameter). Also all (in
 main classifications) with `class = NULL`.
 
@@ -127,7 +127,7 @@ str(sitc_class)
 
 ### Data
 
-`sitc_query` returns the data for class value combinations from a
+`uljas_data` returns the data for class value combinations from a
 statistics (specified with ifile parameter).
 
 ``` r

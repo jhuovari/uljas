@@ -1,5 +1,10 @@
 #' Replace special characters in queries
 #'
+#' Translate scandinavian characters to code for query.
+#'
+#' @param x a string to tranlate
+#'
+#' @export
 #' @examples
 #'  translate_queries("Väestö VÄESTÖ")
 
