@@ -12,7 +12,8 @@ The R client for the Finnish Customs (Tulli) database Uljas. See:
 
 ## Installation
 
-You can install the uljas from [github](https://) with:
+You can install the uljas from
+[github](https://github.com/jhuovari/uljas) with:
 
 ``` r
 # install.packages("devtools")
