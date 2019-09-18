@@ -31,7 +31,7 @@ devtools::install_github("jhuovari/uljas")
 
 ## Use
 
-### statistics
+### Statistics
 
 Statistics present in the database.
 

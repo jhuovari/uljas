@@ -1,5 +1,5 @@
 #'
-#'
+#' @export
 #' @examples
 #' stats <- uljas_stats("fi")
 #'
@@ -12,7 +12,7 @@ uljas_stats <- function(lang = "en"){
 
 
 #' Get dimensions from Uljas api
-#'
+#' @export
 #' @return a list.
 #' @examples
 #'   sitc_dims <- uljas_dims(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
@@ -26,7 +26,7 @@ uljas_dims <- function(ifile, lang = "en"){
 }
 
 #' Get classifications from Uljas api
-#'
+#' @export
 #' @return a list.
 #' @examples
 #'   sitc_class <- uljas_class(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", class = "SITC Products")
@@ -42,21 +42,16 @@ uljas_class <- function(ifile, class, lang = "en"){
 }
 
 #' Get data from Uljas api
-#'
+#' @export
 #' @examples
 #'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
 #'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
 
-
-
 uljas_data <- function(ifile, lang = "en", classifiers, ...){
   classifiers <- purrr::map(classifiers, paste, collapse = '"')
   dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ..., query_list = classifiers)
-  dat <- suppressMessages(
-    dat$content %>%
-      tidyr::unnest_wider(keys)
-  ) %>%
-    dplyr::mutate(vals = unlist(vals))
+  dat <- suppressMessages(tidyr::unnest_wider(dat$content, keys))
+  dat <- dplyr::mutate(dat, vals = unlist(vals))
   names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
   dat
 }

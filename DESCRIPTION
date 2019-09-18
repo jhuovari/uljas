@@ -8,5 +8,5 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.2)
-Imports: httr, jsonlite, purrr, stringr, tidyr
+Imports: httr, jsonlite, dplyr, purrr, stringr, tidyr
 Suggets: knitr
