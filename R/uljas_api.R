@@ -22,7 +22,8 @@ uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
     stop("API did not return json", call. = FALSE)
   }
 
-  parsed <- jsonlite::fromJSON(httr::content(resp, "text"), simplifyVector = TRUE, flatten = TRUE)
+  cont <- httr::content(resp, "text")
+  parsed <- suppressWarnings(jsonlite::fromJSON(cont, simplifyVector = TRUE, flatten = TRUE))
 
   if (httr::http_error(resp)) {
     stop(
