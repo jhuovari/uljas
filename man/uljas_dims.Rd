@@ -7,7 +7,8 @@
 uljas_dims(ifile, lang = "en")
 }
 \arguments{
-\item{ifile}{a name of the statistics file with relative data directory path. Get from \code{\link{uljas_stats}}}
+\item{ifile}{a name of the statistics file with relative data directory path.
+Get from \code{\link{uljas_stats}}}
 
 \item{lang}{a language code. Available en, fi, se.}
 }

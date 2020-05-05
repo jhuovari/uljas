@@ -9,16 +9,20 @@ uljas_data(classifiers, ifile, lang = "en", ...)
 \arguments{
 \item{classifiers}{a list of classes with values of levels to get.}
 
-\item{ifile}{a name of the statistics file with relative data directory path. Get from \code{\link{uljas_stats}}}
+\item{ifile}{a name of the statistics file with relative data directory path.
+Get from \code{\link{uljas_stats}}}
 
 \item{lang}{a language code. Available en, fi, se.}
 
 \item{...}{additional parameters for a query. Passed to \code{\link{uljas_api}}.}
 }
 \description{
-\code{uljas_data} returns the data for class value combinations from a statistics (specified with ifile parameter).
+\code{uljas_data} returns the data for class value combinations from a statistics
+(specified with ifile parameter).
 }
 \examples{
-  sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
-  sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
+  sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"),
+                     `Time period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
+  sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
+                          classifiers = sitc_query)
 }

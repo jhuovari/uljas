@@ -9,7 +9,8 @@ uljas_class(class, ifile, lang = "en")
 \arguments{
 \item{class}{a name of a classification from \code{\link{uljas_dims}}}
 
-\item{ifile}{a name of the statistics file with relative data directory path. Get from \code{\link{uljas_stats}}}
+\item{ifile}{a name of the statistics file with relative data directory path.
+Get from \code{\link{uljas_stats}}}
 
 \item{lang}{a language code. Available en, fi, se.}
 }
@@ -20,7 +21,9 @@ a list.
 Get classifications from Uljas api
 }
 \examples{
-  sitc_class <- uljas_class(class = "SITC Products", ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
-  sitc_class_all <- uljas_class(class = NULL, ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
+  sitc_class <- uljas_class(class = "SITC Products",
+                            ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
+  sitc_class_all <- uljas_class(class = NULL,
+                            ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
 
 }

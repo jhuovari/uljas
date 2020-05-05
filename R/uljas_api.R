@@ -14,7 +14,9 @@
 
 
 uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
-  url <- httr::modify_url(url="http://uljas.tulli.fi/uljas/graph/api.aspx", query = c(list(lang = lang, atype = atype, konv = konv, ...), query_list))
+  url <- httr::modify_url(url="http://uljas.tulli.fi/uljas/graph/api.aspx",
+                          query = c(list(lang = lang, atype = atype, konv = konv, ...),
+                                    query_list))
 
   resp <- httr::GET(url)
 

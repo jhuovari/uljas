@@ -4,9 +4,11 @@
 #'
 #' @param x a string to tranlate
 #'
+#' @encoding UTF-8
+#'
 #' @export
 #' @examples
-#'  translate_queries("Väestö VÄESTÖ")
+#'  translate_queries("V\u00e4est\u00f6 V\u00c4EST\u00d6")
 
 translate_queries <- function(x){
   # c("ä" = "*228;", "ö" = "*246;", "å" = "*229;", "Ä" = "*196;", "Ö" = "*214;", "Å" = "*197;", " " = "*;")

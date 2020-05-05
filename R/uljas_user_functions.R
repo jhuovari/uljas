@@ -22,7 +22,8 @@ uljas_stats <- function(lang = "en"){
 #' \code{uljas_dims} return dimensions that are available for a certain statistics.
 #' Use ifile from \code{\link{uljas_stats}}.
 #'
-#' @param ifile a name of the statistics file with relative data directory path. Get from \code{\link{uljas_stats}}
+#' @param ifile a name of the statistics file with relative data directory path.
+#'        Get from \code{\link{uljas_stats}}
 #' @inheritParams uljas_stats
 #'
 #' @export
@@ -47,8 +48,10 @@ uljas_dims <- function(ifile, lang = "en"){
 #' @export
 #' @return a list.
 #' @examples
-#'   sitc_class <- uljas_class(class = "SITC Products", ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
-#'   sitc_class_all <- uljas_class(class = NULL, ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
+#'   sitc_class <- uljas_class(class = "SITC Products",
+#'                             ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
+#'   sitc_class_all <- uljas_class(class = NULL,
+#'                             ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
 #'
 
 uljas_class <- function(class, ifile, lang = "en"){
@@ -61,19 +64,24 @@ uljas_class <- function(class, ifile, lang = "en"){
 
 #' Get data from Uljas api
 #'
-#' \code{uljas_data} returns the data for class value combinations from a statistics (specified with ifile parameter).
+#' \code{uljas_data} returns the data for class value combinations from a statistics
+#' (specified with ifile parameter).
 #'
 #' @param classifiers a list of classes with values of levels to get.
 #' @inheritParams uljas_dims
 #' @param ... additional parameters for a query. Passed to \code{\link{uljas_api}}.
 #' @export
 #' @examples
-#'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
-#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
+#'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"),
+#'                      `Time period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
+#'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
+#'                           classifiers = sitc_query)
 
 uljas_data <- function(classifiers, ifile, lang = "en", ...){
   classifiers <- purrr::map(classifiers, paste, collapse = '"')
-  dat <- uljas_api(lang = lang, atype = "data", konv = "json", ifile = ifile, ..., query_list = classifiers)
+  dat <- uljas_api(lang = lang, atype = "data", konv = "json",
+                   ifile = ifile, ...,
+                   query_list = classifiers)
   dat <- suppressMessages(tidyr::unnest_wider(dat$content, keys))
   dat <- dplyr::mutate(dat, vals = unlist(vals))
   names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
