@@ -7,15 +7,18 @@
 uljas_api(lang = "en", atype, konv, ..., query_list = NULL)
 }
 \arguments{
-\item{lang}{a language code. Available en, fi, se.}
+\item{lang}{A language code. Available en, fi, se.}
 
-\item{atype}{a type of query.}
+\item{atype}{A type of query.}
 
-\item{konv}{a output format}
+\item{konv}{A output format}
 
-\item{...}{additional parameters for a query.}
+\item{...}{Additional parameters for a query.}
 
-\item{query_list}{additional parameters for a query as a list.}
+\item{query_list}{Additional parameters for a query as a list.}
+}
+\value{
+A list with uljas api type class.
 }
 \description{
 Use user functions \code{\link{uljas_stats}}, \code{\link{uljas_dims}},

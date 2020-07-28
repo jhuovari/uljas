@@ -5,12 +5,14 @@
 #' See more from Uljas api page https://tulli.fi/en/statistics/uljas-api
 #'
 #'
-#' @param lang a language code. Available en, fi, se.
-#' @param atype a type of query.
-#' @param konv a output format
-#' @param ... additional parameters for a query.
-#' @param query_list additional parameters for a query as a list.
+#' @param lang A language code. Available en, fi, se.
+#' @param atype A type of query.
+#' @param konv A output format
+#' @param ... Additional parameters for a query.
+#' @param query_list Additional parameters for a query as a list.
+#'
 #' @export
+#' @return A list with uljas api type class.
 
 
 uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
@@ -24,8 +26,12 @@ uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
     stop("API did not return json", call. = FALSE)
   }
 
-  cont <- httr::content(resp, "text")
-  parsed <- suppressWarnings(jsonlite::fromJSON(cont, simplifyVector = TRUE, flatten = TRUE))
+
+  # Removes illegal BOM. inspired by: https://gist.github.com/hrbrmstr/be3bf6e2b7e8b06648fd
+  cont <- readBin(resp$content[4:length(resp$content)], "character")
+  # cont <- (httr::content(resp, "text"))
+
+  parsed <- jsonlite::fromJSON(cont, simplifyVector = TRUE, flatten = TRUE)
 
   if (httr::http_error(resp)) {
     stop(
@@ -39,6 +45,7 @@ uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
     )
   }
 
+  # Return
   structure(
     list(
       content = parsed,

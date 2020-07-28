@@ -79,7 +79,7 @@ str(sitc_class)
 
 ```{r data}
 
-sitc_query <- list(`SITC Products` = c("0" , "02"), TimePeriod = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
+sitc_query <- list(`SITC Products` = c("0" , "02"), `Time Period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
 sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
 
 head(sitc_data)

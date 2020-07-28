@@ -10,7 +10,7 @@
 #' stats <- uljas_stats("fi")
 #'
 uljas_stats <- function(lang = "en"){
-  stats <- uljas_api(lang =, atype = "stats", konv = "json")
+  stats <- uljas_api(lang = lang, atype = "stats", konv = "json")
   stats$content
 }
 
@@ -70,6 +70,9 @@ uljas_class <- function(class, ifile, lang = "en"){
 #' @param classifiers a list of classes with values of levels to get.
 #' @inheritParams uljas_dims
 #' @param ... additional parameters for a query. Passed to \code{\link{uljas_api}}.
+#'
+#' @importFrom rlang .data
+#'
 #' @export
 #' @examples
 #'   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"),
@@ -82,8 +85,8 @@ uljas_data <- function(classifiers, ifile, lang = "en", ...){
   dat <- uljas_api(lang = lang, atype = "data", konv = "json",
                    ifile = ifile, ...,
                    query_list = classifiers)
-  dat <- suppressMessages(tidyr::unnest_wider(dat$content, keys))
-  dat <- dplyr::mutate(dat, vals = unlist(vals))
+  dat <- suppressMessages(tidyr::unnest_wider(dat$content, .data$keys))
+  dat <- dplyr::mutate(dat, vals = unlist(.data$vals))
   names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
   dat
 }
