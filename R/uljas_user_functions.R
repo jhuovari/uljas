@@ -69,6 +69,7 @@ uljas_class <- function(class, ifile, lang = "en"){
 #'
 #' @param classifiers a list of classes with values of levels to get.
 #' @inheritParams uljas_dims
+#' @param naming whether to use (longer) labels or (shorter) ids.
 #' @param ... additional parameters for a query. Passed to \code{\link{uljas_api}}.
 #'
 #' @importFrom rlang .data
@@ -80,14 +81,16 @@ uljas_class <- function(class, ifile, lang = "en"){
 #'   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
 #'                           classifiers = sitc_query)
 
-uljas_data <- function(classifiers, ifile, lang = "en", ...){
+uljas_data <- function(classifiers, ifile, lang = "en", naming = "label", ...){
   classifiers <- purrr::map(classifiers, paste, collapse = '"')
-  dat <- uljas_api(lang = lang, atype = "data", konv = "json",
+  dat <- uljas_api(lang = lang, atype = "data", konv = "json-stat",
                    ifile = ifile, ...,
                    query_list = classifiers)
-  dat <- suppressMessages(tidyr::unnest_wider(dat$content, .data$keys))
-  dat <- dplyr::mutate(dat, vals = unlist(.data$vals))
-  names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
+  # old
+  # dat <- suppressMessages(tidyr::unnest_wider(dat$content, .data$keys))
+  # dat <- dplyr::mutate(dat, vals = unlist(.data$vals))
+  # names(dat) <- c(names(classifiers)[1:(length(names(classifiers))-1)], "values")
+  dat <- dplyr::rename(dat$content, values = "value")
   dat
 }
 

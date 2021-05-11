@@ -4,7 +4,7 @@
 \alias{uljas_api}
 \title{Main api-function for R client for the Finnish Customs (Tulli) database Uljas}
 \usage{
-uljas_api(lang = "en", atype, konv, ..., query_list = NULL)
+uljas_api(lang = "en", atype, konv, ..., query_list = NULL, naming = "label")
 }
 \arguments{
 \item{lang}{A language code. Available en, fi, se.}
@@ -16,6 +16,8 @@ uljas_api(lang = "en", atype, konv, ..., query_list = NULL)
 \item{...}{Additional parameters for a query.}
 
 \item{query_list}{Additional parameters for a query as a list.}
+
+\item{naming}{whether to use (longer) labels or (shorter) ids.}
 }
 \value{
 A list with uljas api type class.

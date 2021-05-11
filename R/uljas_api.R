@@ -10,12 +10,13 @@
 #' @param konv A output format
 #' @param ... Additional parameters for a query.
 #' @param query_list Additional parameters for a query as a list.
+#' @param naming whether to use (longer) labels or (shorter) ids.
 #'
 #' @export
 #' @return A list with uljas api type class.
 
 
-uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
+uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL, naming = "label") {
   url <- httr::modify_url(url="http://uljas.tulli.fi/uljas/graph/api.aspx",
                           query = c(list(lang = lang, atype = atype, konv = konv, ...),
                                     query_list))
@@ -31,7 +32,15 @@ uljas_api <- function(lang = "en", atype, konv, ..., query_list = NULL) {
   cont <- readBin(resp$content[4:length(resp$content)], "character")
   # cont <- (httr::content(resp, "text"))
 
-  parsed <- jsonlite::fromJSON(cont, simplifyVector = TRUE, flatten = TRUE)
+  if (konv == "json") {
+    parsed <- jsonlite::fromJSON(cont, simplifyVector = TRUE, flatten = TRUE)
+  } else if (konv == "json-stat") {
+    parsed <- rjstat::fromJSONstat(cont, naming = naming, use_factors = TRUE)[[1]]
+  } else {
+    stop("Wrong output format ", konv, ". Allowed are json and json-stat.")
+  }
+
+
 
   if (httr::http_error(resp)) {
     stop(

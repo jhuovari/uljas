@@ -4,7 +4,7 @@
 \alias{uljas_data}
 \title{Get data from Uljas api}
 \usage{
-uljas_data(classifiers, ifile, lang = "en", ...)
+uljas_data(classifiers, ifile, lang = "en", naming = "label", ...)
 }
 \arguments{
 \item{classifiers}{a list of classes with values of levels to get.}
@@ -13,6 +13,8 @@ uljas_data(classifiers, ifile, lang = "en", ...)
 Get from \code{\link{uljas_stats}}}
 
 \item{lang}{a language code. Available en, fi, se.}
+
+\item{naming}{whether to use (longer) labels or (shorter) ids.}
 
 \item{...}{additional parameters for a query. Passed to \code{\link{uljas_api}}.}
 }

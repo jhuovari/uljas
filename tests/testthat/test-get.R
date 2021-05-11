@@ -22,8 +22,14 @@ test_that("uljas_class works", {
 
 context("Get data")
 
-test_that("uljas_class works", {
+test_that("uljas_data works", {
   sitc_query <- list(`SITC Products` = c("02"), `Time period` = "=LAST", Flow = 1, Country = "AT", Indicators = "V1")
   test <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
-  expect_equal(names(test), c(names(sitc_query)[1:4], "values"))
+  expect_equal(names(test), c(names(sitc_query), "values"))
+})
+
+test_that("uljas_data works 2 indicators", {
+  sitc_query <- list(`SITC Products` = c("02"), `Time period` = "=LAST", Flow = 1, Country = "AT", Indicators = c("V1", "V3"))
+  test <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
+  expect_equal(names(test), c(names(sitc_query), "values"))
 })
