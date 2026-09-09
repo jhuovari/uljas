@@ -17,8 +17,8 @@ You can install the uljas from
 [github](https://github.com/jhuovari/uljas) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("jhuovari/uljas")
+# install.packages("pak")
+pak::pak("jhuovari/uljas")
 ```
 
 ## Use
