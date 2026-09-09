@@ -18,13 +18,24 @@ Get from \code{\link{uljas_stats}}}
 
 \item{...}{additional parameters for a query. Passed to \code{\link{uljas_api}}.}
 }
+\value{
+a tibble with a column for each classifier and a values column.
+}
 \description{
 \code{uljas_data} returns the data for class value combinations from a statistics
 (specified with ifile parameter).
 }
+\details{
+A classifier value may also be one of the api keywords \code{"=ALL"},
+\code{"=FIRST"} and \code{"=LAST"}. Note that the keywords follow the order
+of the classification, which for time periods is the newest first, and that
+the code of a total is an empty string.
+}
 \examples{
+\donttest{
   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"),
                      `Time period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
                           classifiers = sitc_query)
+}
 }

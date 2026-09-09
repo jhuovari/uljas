@@ -13,13 +13,14 @@ Get from \code{\link{uljas_stats}}}
 \item{lang}{a language code. Available en, fi, se.}
 }
 \value{
-a list.
+a named list of data.frames, one for each dimension.
 }
 \description{
 \code{uljas_dims} return dimensions that are available for a certain statistics.
 Use ifile from \code{\link{uljas_stats}}.
 }
 \examples{
+\donttest{
   sitc_dims <- uljas_dims(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
-
+}
 }

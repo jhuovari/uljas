@@ -10,12 +10,13 @@ uljas_stats(lang = "en")
 \item{lang}{a language code. Available en, fi, se.}
 }
 \value{
-a data.frame.
+a data.frame with the columns ifile, title and utime.
 }
 \description{
 Returns a data.frame of statistics in the Uljas database.
 }
 \examples{
-stats <- uljas_stats("fi")
-
+\donttest{
+  stats <- uljas_stats("fi")
+}
 }
