@@ -6,7 +6,7 @@
   classification with an empty string as its code, which
   `rjstat::fromJSONstat()` has rejected since rjstat 0.4.0. The JSON-stat
   answer is now parsed by the package itself and the rjstat dependency is
-  dropped (#3).
+  dropped.
 
 * `uljas_dims()` now uses its `lang` argument, instead of always answering in
   English.
@@ -15,7 +15,7 @@
 
 * A failed request is reported with its status code and url. The api answers
   with an html error page, which was earlier reported as
-  "API did not return json".
+  "API did not return json" (#1).
 
 * Text is read as UTF-8 instead of the native encoding, so that scandinavian
   characters are correct also outside an UTF-8 locale. The byte order mark of

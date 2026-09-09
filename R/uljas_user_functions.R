@@ -74,6 +74,10 @@ uljas_class <- function(class = NULL, ifile, lang = "en"){
 #' \code{uljas_data} returns the data for class value combinations from a statistics
 #' (specified with ifile parameter).
 #'
+#' The names of \code{classifiers} have to be classification names of the
+#' statistics file, see \code{\link{uljas_dims}} and \code{\link{uljas_class}}.
+#' A query with an unknown name or an unknown code fails with a status code 500.
+#'
 #' A classifier value may also be one of the api keywords \code{"=ALL"},
 #' \code{"=FIRST"} and \code{"=LAST"}. Note that the keywords follow the order
 #' of the classification, which for time periods is the newest first, and that
