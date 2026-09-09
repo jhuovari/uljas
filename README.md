@@ -148,26 +148,53 @@ sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), `Time peri
 sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
 
 head(sitc_data)
-#> # A tibble: 6 x 6
-#>   Classification of Products SIT~1 `Time period` Flow  Country Indicators values
+#> # A tibble: 6 × 6
+#>   Classification of Products SIT…¹ `Time period` Flow  Country Indicators values
 #>   <fct>                            <fct>         <fct> <fct>   <fct>       <int>
-#> 1 0 (2002--.) Food and live anima~ 202606        Impo~ AT (20~ Value (eu~ 3.16e6
-#> 2 0 (2002--.) Food and live anima~ 202605        Impo~ AT (20~ Value (eu~ 2.99e6
-#> 3 0 (2002--.) Food and live anima~ 202604        Impo~ AT (20~ Value (eu~ 3.77e6
-#> 4 0 (2002--.) Food and live anima~ 202603        Impo~ AT (20~ Value (eu~ 3.28e6
-#> 5 0 (2002--.) Food and live anima~ 202602        Impo~ AT (20~ Value (eu~ 3.38e6
-#> 6 0 (2002--.) Food and live anima~ 202601        Impo~ AT (20~ Value (eu~ 3.75e6
-#> # i abbreviated name: 1: `Classification of Products SITC1`
+#> 1 0 (2002--.) Food and live anima… 202606        Impo… AT (20… Value (eu… 3.16e6
+#> 2 0 (2002--.) Food and live anima… 202605        Impo… AT (20… Value (eu… 2.99e6
+#> 3 0 (2002--.) Food and live anima… 202604        Impo… AT (20… Value (eu… 3.77e6
+#> 4 0 (2002--.) Food and live anima… 202603        Impo… AT (20… Value (eu… 3.28e6
+#> 5 0 (2002--.) Food and live anima… 202602        Impo… AT (20… Value (eu… 3.38e6
+#> 6 0 (2002--.) Food and live anima… 202601        Impo… AT (20… Value (eu… 3.75e6
+#> # ℹ abbreviated name: ¹​`Classification of Products SITC1`
 ```
 
 A classifier value may also be one of the api keywords `"=ALL"`,
-`"=FIRST"` and `"=LAST"`. The keywords follow the order of the
+`"=FIRST"` and `"=LAST"`, the two latter optionally with a number of
+values, e.g. `"=LAST 12"`. The keywords follow the order of the
 classification, which for time periods is the newest first, so
 `"=FIRST"` is the latest period. The code of a total is an empty string,
 so a total can not be asked for on its own, but it is included in
 `"=ALL"`.
 
-An individual request return is limited to 50 000 cells.
+### Large queries
+
+An individual request is limited to 50 000 cells, i.e. to 50 000
+combinations of the classifier values. `uljas_query_size` tells how many
+cells a query asks for.
+
+``` r
+
+sitc5_query <- list(`Classification of Products SITC5` = "=ALL", `Time period` = "=ALL",
+                    Flow = 1, Country = "AT", Indicators = "V1")
+
+uljas_query_size(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc5_query)
+#> [1] 57438
+```
+
+`uljas_data` divides a larger query into several requests and combines
+the answers, so the result is the same as that of a single request. Use
+`max_cells = Inf` to send the query as it is.
+
+``` r
+
+sitc5_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc5_query)
+#> The query is divided into 2 requests.
+
+nrow(sitc5_data)
+#> [1] 57438
+```
 
 Note that the classifications and the statistics files of the database
 do change. Finnish Customs renewed most of the cubes on 30 March 2026:

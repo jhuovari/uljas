@@ -1,5 +1,22 @@
 # uljas 0.2.0
 
+## New features
+
+* `uljas_data()` divides a query that is over the api limit of 50 000 cells
+  into several requests and combines the answers (#5). The result is the same
+  as that of a single request. `max_cells = Inf` sends the query as it is.
+
+* `uljas_query_size()` returns the number of cells a query asks for, also when
+  it is asked for with the keywords `"=ALL"`, `"=FIRST"` and `"=LAST"`.
+
+* A query longer than the 2048 bytes that the server accepts in an url is sent
+  as a post request. A query of more than about 230 codes was earlier answered
+  with a status 404.
+
+* The api answers a failed query with an html page, from which its own message
+  is now passed on, e.g. "Query result compinations are over limit (50000)" or
+  "Query ifile not found or is not valid" (#1).
+
 ## Bug fixes
 
 * `uljas_data()` works again. The Uljas api returns the total of a
@@ -15,7 +32,7 @@
 
 * A failed request is reported with its status code and url. The api answers
   with an html error page, which was earlier reported as
-  "API did not return json" (#1).
+  "API did not return json".
 
 * Text is read as UTF-8 instead of the native encoding, so that scandinavian
   characters are correct also outside an UTF-8 locale. The byte order mark of

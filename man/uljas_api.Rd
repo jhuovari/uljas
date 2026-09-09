@@ -28,3 +28,7 @@ Use user functions \code{\link{uljas_stats}}, \code{\link{uljas_dims}},
 See more from the Uljas api page
 \url{https://tilastot.tulli.fi/en/uljas-statistical-database/uljas-api}.
 }
+\details{
+A query is sent as a get request, or as a post request if it is longer than
+the 2048 bytes that the server accepts in an url.
+}

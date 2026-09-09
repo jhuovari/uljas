@@ -79,13 +79,21 @@ uljas_class <- function(class = NULL, ifile, lang = "en"){
 #' A query with an unknown name or an unknown code fails with a status code 500.
 #'
 #' A classifier value may also be one of the api keywords \code{"=ALL"},
-#' \code{"=FIRST"} and \code{"=LAST"}. Note that the keywords follow the order
-#' of the classification, which for time periods is the newest first, and that
-#' the code of a total is an empty string.
+#' \code{"=FIRST"} and \code{"=LAST"}, the two latter optionally with a number
+#' of values, e.g. \code{"=LAST 12"}. Note that the keywords follow the order of
+#' the classification, which for time periods is the newest first, and that the
+#' code of a total is an empty string.
+#'
+#' An individual request is limited to 50 000 cells, i.e. to 50 000 combinations
+#' of the classifier values. A larger query is divided into several requests,
+#' which are then combined, and the size of the query is checked beforehand with
+#' \code{\link{uljas_query_size}}. Set \code{max_cells = Inf} to send the query
+#' as it is.
 #'
 #' @param classifiers a list of classes with values of levels to get.
 #' @inheritParams uljas_dims
 #' @param naming whether to use (longer) labels or (shorter) ids.
+#' @param max_cells the largest number of cells to ask for in one request.
 #' @param ... additional parameters for a query. Passed to \code{\link{uljas_api}}.
 #'
 #' @export
@@ -98,11 +106,30 @@ uljas_class <- function(class = NULL, ifile, lang = "en"){
 #'                           classifiers = sitc_query)
 #' }
 
-uljas_data <- function(classifiers, ifile, lang = "en", naming = "label", ...){
-  classifiers <- purrr::map(classifiers, paste, collapse = '"')
-  dat <- uljas_api(lang = lang, atype = "data", konv = "json-stat",
-                   ifile = ifile, ...,
-                   naming = naming,
-                   query_list = classifiers)
-  dplyr::rename(dat$content, values = "value")
+uljas_data <- function(classifiers, ifile, lang = "en", naming = "label",
+                       max_cells = 50000, ...){
+  parts <- uljas_query_parts(classifiers, ifile = ifile, lang = lang,
+                             max_cells = max_cells)
+
+  if (length(parts) > 1) {
+    message("The query is divided into ", length(parts), " requests.")
+  }
+
+  dat <- purrr::map(parts, function(part) {
+    part <- purrr::map(part, paste, collapse = '"')
+    uljas_api(lang = lang, atype = "data", konv = "json-stat",
+              ifile = ifile, ...,
+              naming = naming,
+              query_list = part)$content
+  })
+
+  dat <- dplyr::bind_rows(dat)
+
+  if (length(parts) > 1) {
+    # the rows are put in the order of a single request
+    dims <- setdiff(names(dat), "value")
+    dat <- dat[do.call(order, as.list(dat[dims])), , drop = FALSE]
+  }
+
+  dplyr::rename(dat, values = "value")
 }
