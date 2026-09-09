@@ -4,7 +4,14 @@
 \alias{uljas_data}
 \title{Get data from Uljas api}
 \usage{
-uljas_data(classifiers, ifile, lang = "en", naming = "label", ...)
+uljas_data(
+  classifiers,
+  ifile,
+  lang = "en",
+  naming = "label",
+  max_cells = 50000,
+  ...
+)
 }
 \arguments{
 \item{classifiers}{a list of classes with values of levels to get.}
@@ -16,15 +23,39 @@ Get from \code{\link{uljas_stats}}}
 
 \item{naming}{whether to use (longer) labels or (shorter) ids.}
 
+\item{max_cells}{the largest number of cells to ask for in one request.}
+
 \item{...}{additional parameters for a query. Passed to \code{\link{uljas_api}}.}
+}
+\value{
+a tibble with a column for each classifier and a values column.
 }
 \description{
 \code{uljas_data} returns the data for class value combinations from a statistics
 (specified with ifile parameter).
 }
+\details{
+The names of \code{classifiers} have to be classification names of the
+statistics file, see \code{\link{uljas_dims}} and \code{\link{uljas_class}}.
+A query with an unknown name or an unknown code fails with a status code 500.
+
+A classifier value may also be one of the api keywords \code{"=ALL"},
+\code{"=FIRST"} and \code{"=LAST"}, the two latter optionally with a number
+of values, e.g. \code{"=LAST 12"}. Note that the keywords follow the order of
+the classification, which for time periods is the newest first, and that the
+code of a total is an empty string.
+
+An individual request is limited to 50 000 cells, i.e. to 50 000 combinations
+of the classifier values. A larger query is divided into several requests,
+which are then combined, and the size of the query is checked beforehand with
+\code{\link{uljas_query_size}}. Set \code{max_cells = Inf} to send the query
+as it is.
+}
 \examples{
+\donttest{
   sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"),
                      `Time period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
   sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC",
                           classifiers = sitc_query)
+}
 }

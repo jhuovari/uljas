@@ -9,9 +9,9 @@ uljas_api(lang = "en", atype, konv, ..., query_list = NULL, naming = "label")
 \arguments{
 \item{lang}{A language code. Available en, fi, se.}
 
-\item{atype}{A type of query.}
+\item{atype}{A type of query. One of stats, dims, class or data.}
 
-\item{konv}{A output format}
+\item{konv}{A output format. One of json or json-stat.}
 
 \item{...}{Additional parameters for a query.}
 
@@ -25,5 +25,10 @@ A list with uljas api type class.
 \description{
 Use user functions \code{\link{uljas_stats}}, \code{\link{uljas_dims}},
 \code{\link{uljas_class}} and \code{\link{uljas_data}}.
-See more from Uljas api page https://tulli.fi/en/statistics/uljas-api
+See more from the Uljas api page
+\url{https://tilastot.tulli.fi/en/uljas-statistical-database/uljas-api}.
+}
+\details{
+A query is sent as a get request, or as a post request if it is longer than
+the 2048 bytes that the server accepts in an url.
 }

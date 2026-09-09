@@ -16,9 +16,11 @@ knitr::opts_chunk$set(
 # uljas
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/jhuovari/uljas/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jhuovari/uljas/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The R client for the Finnish Customs (Tulli) database Uljas. See: https://tulli.fi/en/statistics/uljas-api
+The R client for the Finnish Customs (Tulli) database Uljas. See:
+https://tilastot.tulli.fi/en/uljas-statistical-database/uljas-api
 
 ## Installation
 
@@ -79,14 +81,40 @@ str(sitc_class)
 
 ```{r data}
 
-sitc_query <- list(`SITC Products` = c("0" , "02"), `Time Period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
+sitc_query <- list(`Classification of Products SITC1` = c("0" , "1"), `Time period` = "=ALL", Flow = 1, Country = "AT", Indicators = "V1")
 sitc_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc_query)
 
 head(sitc_data)
 
 ```
 
+A classifier value may also be one of the api keywords `"=ALL"`, `"=FIRST"` and `"=LAST"`, the two latter optionally with a number of values, e.g. `"=LAST 12"`. The keywords follow the order of the classification, which for time periods is the newest first, so `"=FIRST"` is the latest period. The code of a total is an empty string, so a total can not be asked for on its own, but it is included in `"=ALL"`.
 
+### Large queries
 
-An individual request return is limited to 50 000 cells.
+An individual request is limited to 50 000 cells, i.e. to 50 000 combinations of the classifier values. `uljas_query_size` tells how many cells a query asks for.
 
+```{r size}
+
+sitc5_query <- list(`Classification of Products SITC5` = "=ALL", `Time period` = "=ALL",
+                    Flow = 1, Country = "AT", Indicators = "V1")
+
+uljas_query_size(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc5_query)
+
+```
+
+`uljas_data` divides a larger query into several requests and combines the answers, so the result is the same as that of a single request. Use `max_cells = Inf` to send the query as it is.
+
+```{r large}
+
+sitc5_data <- uljas_data(ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC", classifiers = sitc5_query)
+
+nrow(sitc5_data)
+
+```
+
+Note that the classifications and the statistics files of the database do
+change. Finnish Customs renewed most of the cubes on 30 March 2026: the
+current cubes (for example `ULJAS_SITC`) begin from January 2025 and the
+longer time series are in the parallel cubes (for example `ULJAS_SITC2`).
+Check the codes with `uljas_class` if a query stops returning data.

@@ -4,10 +4,11 @@
 \alias{uljas_class}
 \title{Get classifications from Uljas api}
 \usage{
-uljas_class(class, ifile, lang = "en")
+uljas_class(class = NULL, ifile, lang = "en")
 }
 \arguments{
-\item{class}{a name of a classification from \code{\link{uljas_dims}}}
+\item{class}{a name of a classification from \code{\link{uljas_dims}}, or
+NULL for all main classifications.}
 
 \item{ifile}{a name of the statistics file with relative data directory path.
 Get from \code{\link{uljas_stats}}}
@@ -15,15 +16,17 @@ Get from \code{\link{uljas_stats}}}
 \item{lang}{a language code. Available en, fi, se.}
 }
 \value{
-a list.
+a named list of data.frames with the columns code and text.
 }
 \description{
-Get classifications from Uljas api
+\code{uljas_class} returns the values in a classification. With
+\code{class = NULL} the values of all main classifications are returned.
 }
 \examples{
+\donttest{
   sitc_class <- uljas_class(class = "SITC Products",
                             ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
   sitc_class_all <- uljas_class(class = NULL,
                             ifile = "/DATABASE/01 ULKOMAANKAUPPATILASTOT/02 SITC/ULJAS_SITC")
-
+}
 }
